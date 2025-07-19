@@ -1,6 +1,6 @@
-import sys
-from pathlib import Path
-sys.path.append(str(Path(__file__).parent.parent))
+#import sys
+#from pathlib import Path
+#sys.path.append(str(Path(__file__).parent.parent))
 import asyncio
 from aiogram import Bot, Dispatcher, F, types, Router
 from aiogram.types import Message, FSInputFile, CallbackQuery
