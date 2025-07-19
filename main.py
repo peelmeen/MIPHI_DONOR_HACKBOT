@@ -11,6 +11,7 @@ from aiogram.filters import CommandStart, Command
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
 import logging
+import aiofiles
 from aiogram.methods import DeleteWebhook
 from mistralai import Mistral
 
@@ -234,7 +235,7 @@ async def edit(message: Message):
 
 @dp.callback_query(F.data == "message")
 async def edit(callback: CallbackQuery):
-    if callback.message.from_user.id in Admins:
+    if callback.from_user.id in Admins:
         await callback.message.answer("Admin панель, выберите какую рассылку хотите сделать", reply_markup=admin_message)
     else:
         await callback.message.answer("Вы не админ:(")
@@ -305,7 +306,7 @@ async def edit(callback: CallbackQuery, state: FSMContext):
 @dp.callback_query(F.data == "admin_edit_last_don")
 async def edit(callback: CallbackQuery, state: FSMContext):
     if callback.message.from_user.id in Admins:
-        await callback.message.answer("Admin, напишите какому пользователю хотите поменять данные в формате: 215346356(telegramid), значение занасимое в таблицу", reply_markup=admin_edit)
+        await callback.message.answer("Admin, напишите какому пользователю хотите поменять данные в формате: 215346356(telegramid)| значение занасимое в таблицу", reply_markup=admin_edit)
         await state.update_data(last_command="admin_edit_last_don")
         await state.set_state(Form1.waiting_for_mess)
     else:
@@ -495,8 +496,8 @@ async def handle_user_media(message: Message, state: FSMContext): # , state: FSM
     
 
     elif last_command == "get_id":
-        user = req.split(",")[0]
-        mess = req.split(",")[1]
+        user = req.split("|")[0]
+        mess = req.split("|")[1]
         await bot.send_message(user, mess)
 
 
@@ -555,6 +556,7 @@ async def handle_user_media(message: Message, state: FSMContext): # , state: FSM
         data = req.strip(',')[1]
         await edit_last_blood_center(data, telegram_id)
 
+
     await state.clear()
 
 
@@ -565,7 +567,7 @@ async def handle_user_media(message: Message, state: FSMContext): # , state: FSM
 
 
 @dp.message(Command('myinfo'))
-async def send_last_post(message: types.Message):
+async def send_my_info(message: types.Message):
     if await get_agree(message.from_user.id) != 1:
         await message.answer("Сначала нужно согласиться на обработку данных!")
         return
@@ -577,6 +579,183 @@ async def send_last_post(message: types.Message):
     telegram_id = message.from_user.id
     info = await get_data(telegram_id)
     await message.answer(f"ФИО:{info[0]}\nТелефон: {info[1]}\nДата: {info[2]}\nЦентр Крови: {info[3]}\n\nвыберите ниже что хотите изменить👇", reply_markup=Editss)
+
+
+
+
+
+@dp.message(Command('info'))
+async def send_my_info(message: types.Message):
+    if await get_agree(message.from_user.id) != 1:
+        await message.answer("Сначала нужно согласиться на обработку данных!")
+        return
+
+    # telegram_id = message.from_user.id
+    # info = await get_data(telegram_id)
+    # await message.answer(f"{info}")#ФИО:{info[0]}\nДата: {info[1]}", reply_markup=Editss)
+
+
+    await message.answer(f"Выберите ниже информацию, которая вас интересует", reply_markup=Info)
+
+
+
+
+
+
+
+
+@dp.callback_query(F.data == 'Need')
+async def info1(callback: CallbackQuery):    
+    file = "src/Need.txt"
+
+    async with aiofiles.open(file, 'r', encoding='utf-8') as f:
+        content = await f.read()
+
+
+    await callback.message.answer(f"{content}")
+
+
+
+
+
+
+
+
+
+@dp.callback_query(F.data == 'Donor')
+async def info1(callback: CallbackQuery):    
+    file = "src/Donor.txt"
+
+    async with aiofiles.open(file, 'r', encoding='utf-8') as f:
+        content = await f.read()
+
+
+    await callback.message.answer(f"{content}")
+
+
+
+@dp.callback_query(F.data == 'Donor')
+async def info1(callback: CallbackQuery):    
+    file = "src/Donor.txt"
+
+    async with aiofiles.open(file, 'r', encoding='utf-8') as f:
+        content = await f.read()
+
+
+    await callback.message.answer(f"{content}")
+
+
+
+
+
+@dp.callback_query(F.data == 'Food')
+async def info1(callback: CallbackQuery):    
+    file = "src/Food.txt"
+
+    async with aiofiles.open(file, 'r', encoding='utf-8') as f:
+        content = await f.read()
+
+
+    await callback.message.answer(f"{content}")
+
+
+
+
+@dp.callback_query(F.data == 'Infect')
+async def info1(callback: CallbackQuery):    
+    file = "src/Infect.txt"
+
+    async with aiofiles.open(file, 'r', encoding='utf-8') as f:
+        content = await f.read()
+
+
+    await callback.message.answer(f"{content}")
+
+
+
+
+
+@dp.callback_query(F.data == 'Vremen')
+async def info1(callback: CallbackQuery):    
+    file = "src/Vremen.txt"
+
+    async with aiofiles.open(file, 'r', encoding='utf-8') as f:
+        content = await f.read()
+
+
+    await callback.message.answer(f"{content}")
+
+
+
+
+@dp.callback_query(F.data == 'Donor_brain')
+async def info1(callback: CallbackQuery):    
+    file = "src/Donor_brain.txt"
+
+    async with aiofiles.open(file, 'r', encoding='utf-8') as f:
+        content = await f.read()
+
+
+    await callback.message.answer(f"{content}")
+
+
+
+
+
+
+@dp.callback_query(F.data == 'Donor_brain')
+async def info1(callback: CallbackQuery):    
+    file = "src/Donor_brain.txt"
+
+    async with aiofiles.open(file, 'r', encoding='utf-8') as f:
+        content = await f.read()
+
+
+    await callback.message.answer(f"{content}")
+
+
+
+
+
+
+
+
+
+@dp.callback_query(F.data == 'Postupi')
+async def info1(callback: CallbackQuery):    
+    file = "src/Postupi.txt"
+
+    async with aiofiles.open(file, 'r', encoding='utf-8') as f:
+        content = await f.read()
+
+
+    await callback.message.answer(f"{content}")
+
+
+
+
+
+@dp.callback_query(F.data == 'Donate')
+async def info1(callback: CallbackQuery):    
+    file = "src/Donate.txt"
+
+    async with aiofiles.open(file, 'r', encoding='utf-8') as f:
+        content = await f.read()
+
+    file1 = "src/Donate1.txt"
+
+    async with aiofiles.open(file1, 'r', encoding='utf-8') as f:
+        content1 = await f.read()
+
+    await callback.message.answer(f"{content}")
+    await callback.message.answer(f"{content1}")
+
+
+
+
+
+
+
 
 
 
